@@ -1,4 +1,4 @@
-﻿package com.mokelock.houseleasing.services.servicesImpl;
+package com.mokelock.houseleasing.services.servicesImpl;
 
 import com.alibaba.fastjson.JSON;
 
@@ -31,12 +31,11 @@ public class HouseServiceImpl implements HouseService {
     //获取房源详细信息
     public JSON speInfo(String house_hash) {
         //根据传进来的实参house_hash，去下载管理员的房屋表，得到这个房子所在文件夹的hash
-        // 然后根据这个hash下载房屋文件夹，然后即可访问里面的文件
+        //然后根据这个hash下载房屋文件夹，然后即可访问里面的文件
 
-        //接口文档中说明：house_hash表示的是房产证的hash
-        //house_pic直接从txt中下载
+        //house_pic直接从txt中下载，直接使用路径表示即可
 
-        IPFS_SERVICE_IMPL isi = new IPFS_SERVICE_IMPL();
+        //IPFS_SERVICE_IMPL isi = new IPFS_SERVICE_IMPL();
 
         //isi.download("这个房子文件夹的hash，假设是thehousefilehash");
         //d:\thehousefilehash\info.txt    表示这个房屋的信息的TXT
