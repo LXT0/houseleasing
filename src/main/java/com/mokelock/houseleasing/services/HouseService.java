@@ -22,5 +22,11 @@ public interface HouseService {
     //获取房屋列表
     JSON allInfo();
 
+    //修改我的房子
+    void myHouse(String house_hash,int state,boolean elevator,int lease,String phone);
+
+    //添加房源
+    JSONObject setUpHouse(String house_id,int state,JSONObject low_location,String specific_location,int floor,boolean elevator,int lease,int lease_type,int house_type,String lon,String lat,String area,String[] house_pic);
+
 }
 

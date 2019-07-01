@@ -198,6 +198,15 @@ public class House{
         this.state = state;
     }
 
+    public String area;
+
+    public String getArea() {
+        return area;
+    }
+    public void setArea(String area) {
+        this.area = area;
+    }
+
     //简略地址JSON
     private JSONObject low_location;
 

@@ -49,13 +49,13 @@ public class HouseServiceImpl implements HouseService {
         String[] key_to_get = {"owner_id","verify", "owner","owner_name",
                 "role","state", "provi","city",
                 "sector","commu_name","specific_location", "floor",
-                "lon", "lat", "elevator", "lease",
+                "lon", "lat",  "elevator", "lease",
                 "house_type", "house_credit", "house_level"};
         String[] key_to_getComment = {"user_id","comment","comment_pic"};
 
         //得到满足条件的房子的信息
-        ArrayList<String[]> detailedHouse = dhtable.query(key_for_search, value_to_search, key_to_get, "");
-        ArrayList<String[]> houseComment = dhtable.get_all(key_to_getComment, "");
+        ArrayList<String[]> detailedHouse = dhtable.query(key_for_search, value_to_search, key_to_get, "C:\\Users\\Administrator\\Desktop\\testing.txt");
+        ArrayList<String[]> houseComment = dhtable.get_all(key_to_getComment, "C:\\Users\\Administrator\\Desktop\\demo2.txt");
 
         //获得所有评论的正确形式
         JSONArray house_comment = new JSONArray();
@@ -68,6 +68,11 @@ public class HouseServiceImpl implements HouseService {
 
         //存放得到的房子的图片
         String[] house_pic = new String[3];//
+
+        house_pic[0] = "C:\\Users\\Administrator\\Desktop\\pic.jpg";
+        house_pic[1] = "C:\\Users\\Administrator\\Desktop\\pic.jpg";
+        house_pic[2] = "C:\\Users\\Administrator\\Desktop\\pic.jpg";
+
 
         //获得符合要求的形式
         String low_str_location = detailedHouse.get(0)[6]+detailedHouse.get(0)[7]+detailedHouse.get(0)[8]+detailedHouse.get(0)[9];
@@ -84,7 +89,7 @@ public class HouseServiceImpl implements HouseService {
                 Integer.parseInt(detailedHouse.get(0)[11]), detailedHouse.get(0)[12], detailedHouse.get(0)[13],
                 Boolean.parseBoolean(detailedHouse.get(0)[14]),Integer.parseInt(detailedHouse.get(0)[15]),
                 Integer.parseInt(detailedHouse.get(0)[16]),Integer.parseInt(detailedHouse.get(0)[17]),
-                Integer.parseInt(detailedHouse.get(0)[18]),house_comment);
+                Double.parseDouble(detailedHouse.get(0)[18]),house_comment);
 
         Response res = new Response(200,"success",theHouse.HtoJson());
         return res.RestoJson3();
@@ -175,7 +180,7 @@ public class HouseServiceImpl implements HouseService {
             }
         }
         //定义要得到的属性的集合
-        String[] key_to_get = {"provi","city","sector","commu_name","lease","house_type","lease_type","elevator"};
+        String[] key_to_get = {"provi","city","sector","commu_name","lease","house_type","lease_type","elevator","house_hash"};
         /**/
 
         //从文件下载获得
@@ -183,7 +188,7 @@ public class HouseServiceImpl implements HouseService {
 
         //查询满足要求的房子
         TableImpl tableforsearch = new TableImpl();
-        ArrayList<String[]> returnedSH = tableforsearch.query(key_to_search,value_to_search,key_to_get,"");
+        ArrayList<String[]> returnedSH = tableforsearch.query(key_to_search,value_to_search,key_to_get,"C:\\Users\\Administrator\\Desktop\\demo.txt");
 
         //声明一个概要信息房子对象
         SampleHouse sh;
@@ -199,7 +204,10 @@ public class HouseServiceImpl implements HouseService {
         String lease_single;
         String house_type_single;
         String lease_type_single;
+        String house_hash_single;
         boolean elevator_single;
+        LowLocation llforStr;// = new LowLocation();
+        String low_str_location;
 
         for(int i = 0;i < returnedSH.size();i++){
             provi_single = returnedSH.get(i)[0];
@@ -210,6 +218,7 @@ public class HouseServiceImpl implements HouseService {
             house_type_single = returnedSH.get(i)[5];
             lease_type_single = returnedSH.get(i)[6];
             elevator_single = Boolean.getBoolean(returnedSH.get(i)[7]);
+            house_hash_single = returnedSH.get(i)[8];
 
                 switch(house_type_single){
                     case "0":
@@ -236,7 +245,9 @@ public class HouseServiceImpl implements HouseService {
                         lease_type_single = "合租";
                         break;
                 }
-                sh = new SampleHouse(house_pic,provi_single+city_single+sector_single+commu_name_single,lease_single,house_type_single,lease_type_single,elevator_single);
+                llforStr = new LowLocation(provi_single,city_single,sector_single,commu_name_single);
+                low_str_location = llforStr.lltoStr();
+                sh = new SampleHouse(house_pic,low_str_location,lease_single,house_type_single,lease_type_single,elevator_single,house_hash_single);
                 allsh.add(sh.SHtoJson());
         }
         Response resOfSearchSH = new Response(200,"success",allsh);
@@ -253,10 +264,12 @@ public class HouseServiceImpl implements HouseService {
          * 返回状态消息
          * */
         String user_ID="123456";
+        String p="123";
+        TableImpl t=new TableImpl();
+        t.insert_into_comment(user_ID,comment,comment_pic,p);
 
         return null;
     }
-
 
     @Override
 
@@ -267,16 +280,16 @@ public class HouseServiceImpl implements HouseService {
          * 遍历房源hash，每个都写为JSON的形式，并把verify=1的放入verified，verify=0的放入non_verified
          * 最后将整个json返回
          * */
-        String[] hash = {"123", "456"};
+        String[] hash = {"sdfwenk31345","sdfwenk31346"};
         String[] key_for_search={"house_hash"};
 
         JSONArray verified = new JSONArray();
         JSONArray non_verified = new JSONArray();
-        JSONArray all=new JSONArray();
-        JSONObject j=new JSONObject();
-        String path="123";
+        //JSONArray all=new JSONArray();
+        JSONObject data=new JSONObject();
+        String path="C:\\Users\\Administrator\\Desktop\\demo.txt";
         TableImpl thouse=new TableImpl();
-        String[] key_to_get = {"verify","photo", "low_location", "lease", "house_type", "lease_type","elevator"};
+        String[] key_to_get = {"verify","house_pic", "provi","city","sector" ,"commu_name","lease", "house_type", "lease_type","elevator"};
 
         for (int i = 0; i < hash.length; i++)
         {
@@ -288,54 +301,68 @@ public class HouseServiceImpl implements HouseService {
             for(int m=0;m<v1.size();m++){
                 String s1="0";
                 String s2="0";
-                Boolean b=true;
+                Boolean b=Boolean.valueOf(v1.get(m)[9]);
+                //String b=v1.get(m)[9];
                 String s=v1.get(m)[2];
-                if(v1.get(m)[4]=="0"){
+                if(v1.get(m)[7].equals("0")){
                     s1="全部";
-                }if (v1.get(m)[4]=="1"){
+                }if (v1.get(m)[7].equals("1")){
                     s1="一室";
-                }if (v1.get(m)[4]=="2"){
+                }if (v1.get(m)[7].equals("2")){
                     s1="二室";
-                }if (v1.get(m)[4]=="3"){
+                }if (v1.get(m)[7].equals("3")){
                     s1="其他";
                 }
-                if (v1.get(m)[5]=="0"){
+                if (v1.get(m)[8].equals("0")){
                     s2="全部";
-                }if (v1.get(m)[5]=="1"){
+                }if (v1.get(m)[8].equals("1")){
                     s2="整租";
-                }if (v1.get(m)[5]=="2"){
+                }if (v1.get(m)[8].equals("2")){
                     s2="合租";
-                }if (v1.get(m)[6]=="1"){
-                    b=true;
-                }if (v1.get(m)[6]=="0"){
-                    b=false;
                 }
+                /*
+                if (v1.get(m)[9].equals("1")){
+                    b=true;
+                }if (v1.get(m)[9].equals("0")){
+                    b=false;
+                }*/
+                String s3=v1.get(m)[2]+v1.get(m)[3]+v1.get(m)[4]+v1.get(m)[5];
+                String lease=v1.get(m)[6];
+                if(v1.get(m)[0].equals("1")){
 
-                String lease=v1.get(m)[3];
-                if(v1.get(m)[0]=="1"){
-
-                    SampleHouse shouse1 = new SampleHouse(v1.get(m)[1],s,lease,s1,s2,b);
+                    SampleHouse shouse1 = new SampleHouse(v1.get(m)[1],s3,lease,s1,s2,b,hash[i]);
                     shouse1.SHtoJson();
                     verified.add(shouse1);
                     //System.out.print(v1.get(m)[b]+" ");
                 }
-                if(v1.get(m)[0]=="0"){
-                    SampleHouse shouse2=new SampleHouse(v1.get(m)[1],s,lease,s1,s2,b);
+                if(v1.get(m)[0].equals("0")){
+                    SampleHouse shouse2=new SampleHouse(v1.get(m)[1],s3,lease,s1,s2,b,hash[i]);
                     shouse2.SHtoJson();
                     non_verified.add(shouse2);
 
                 }
                 System.out.println();
-            }
 
-            all.add( verified);
-            all.add(non_verified);
-            j.put("status",200);
-            j.put("message","success");
-            j.put("data",all);
+
+            }
+            data.put("verified",verified);
+            data.put("non_verified",non_verified);
 
         }
+        //JSONObject data=new JSONObject(all);
+        Response r=new Response(200,"success",data);
 
-        return j;
+        return r.RestoJson3();
     }
+
+    @Override
+    public void myHouse(String house_hash, int state, boolean elevator, int lease, String phone) {
+
+    }
+
+    @Override
+    public JSONObject setUpHouse(String house_id, int state, JSONObject low_location, String specific_location, int floor, boolean elevator, int lease, int lease_type, int house_type, String lon, String lat, String area, String[] house_pic) {
+        return null;
+    }
+
 }
