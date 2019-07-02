@@ -13,7 +13,7 @@ public class SampleHouse {
 
     public SampleHouse() {
     }
-    public SampleHouse(String use_id, String house_pic, String low_str_location, String lease, String lease_inter, String house_type, String lease_type, boolean elevator, boolean verify) {
+    public SampleHouse(String use_id, String house_pic, String low_str_location, String lease, String lease_inter, String house_type, String lease_type, boolean elevator, boolean verify ,String house_hash) {
         this.use_id = use_id;
         this.house_pic = house_pic;
         this.low_str_location = low_str_location;
@@ -23,6 +23,7 @@ public class SampleHouse {
         this.lease_type = lease_type;
         this.elevator = elevator;
         this.verify = verify;
+        this.house_hash = house_hash;
     }
     /*************************************************************************************************/
     //返回前端用到的构造函数

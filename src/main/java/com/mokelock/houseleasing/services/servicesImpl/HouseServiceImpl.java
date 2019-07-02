@@ -47,10 +47,10 @@ public class HouseServiceImpl implements HouseService {
         String[] key_for_search = {"house_hash"};
         String[] value_to_search = {house_hash};
         String[] key_to_get = {"owner_id","verify", "owner","owner_name",
-                "role","state", "provi","city",
-                "sector","commu_name","specific_location", "floor",
-                "lon", "lat",  "elevator", "lease",
-                "house_type", "house_credit", "house_level"};
+                "role","state", "area", "provi",
+                "city", "sector","commu_name","specific_location",
+                "floor", "lon", "lat",  "elevator",
+                "lease", "house_type", "house_credit", "house_level"};
         String[] key_to_getComment = {"user_id","comment","comment_pic"};
 
         //得到满足条件的房子的信息
@@ -75,7 +75,7 @@ public class HouseServiceImpl implements HouseService {
 
 
         //获得符合要求的形式
-        String low_str_location = detailedHouse.get(0)[6]+detailedHouse.get(0)[7]+detailedHouse.get(0)[8]+detailedHouse.get(0)[9];
+        String low_str_location = detailedHouse.get(0)[7]+detailedHouse.get(0)[8]+detailedHouse.get(0)[9]+detailedHouse.get(0)[10];
         //创建一个LowLocation类型的对象
         LowLocation ll = new LowLocation();
         //使用字符串类型的low_str_location来初始化ll
@@ -85,11 +85,11 @@ public class HouseServiceImpl implements HouseService {
 
         House theHouse = new House(house_pic,house_hash,detailedHouse.get(0)[0],Boolean.parseBoolean(detailedHouse.get(0)[1]),
                 detailedHouse.get(0)[2],detailedHouse.get(0)[3],Integer.parseInt(detailedHouse.get(0)[4]),
-                Integer.parseInt(detailedHouse.get(0)[5]), low_location,low_str_location,detailedHouse.get(0)[10],
-                Integer.parseInt(detailedHouse.get(0)[11]), detailedHouse.get(0)[12], detailedHouse.get(0)[13],
-                Boolean.parseBoolean(detailedHouse.get(0)[14]),Integer.parseInt(detailedHouse.get(0)[15]),
-                Integer.parseInt(detailedHouse.get(0)[16]),Integer.parseInt(detailedHouse.get(0)[17]),
-                Double.parseDouble(detailedHouse.get(0)[18]),house_comment);
+                Integer.parseInt(detailedHouse.get(0)[5]), detailedHouse.get(0)[6], low_location,low_str_location,detailedHouse.get(0)[11],
+                Integer.parseInt(detailedHouse.get(0)[12]), detailedHouse.get(0)[13], detailedHouse.get(0)[14],
+                Boolean.parseBoolean(detailedHouse.get(0)[15]),Integer.parseInt(detailedHouse.get(0)[16]),
+                Integer.parseInt(detailedHouse.get(0)[17]),Integer.parseInt(detailedHouse.get(0)[18]),
+                Double.parseDouble(detailedHouse.get(0)[19]),house_comment);
 
         Response res = new Response(200,"success",theHouse.HtoJson());
         return res.RestoJson3();
@@ -356,13 +356,41 @@ public class HouseServiceImpl implements HouseService {
     }
 
     @Override
-    public void myHouse(String house_hash, int state, boolean elevator, int lease, String phone) {
+    public void myHouse(String house_hash, int state, boolean elevator, int lease) {
+
+        //修改房屋信息，house_hash用来标识被修改的房屋
+
+        //根据house_hash，找到该房子所在的文件，然后下载，并且还要修改概要信息表
 
     }
 
     @Override
     public JSONObject setUpHouse(String house_id, int state, JSONObject low_location, String specific_location, int floor, boolean elevator, int lease, int lease_type, int house_type, String lon, String lat, String area, String[] house_pic) {
-        return null;
+
+        TableImpl in = new TableImpl();
+        JSONObject toReturn = new JSONObject();
+
+        String[] key_for_search_get = {"house_id"};
+        String[] value_for_search = {house_id};
+
+        ArrayList<String[]> id = in.query(key_for_search_get,value_for_search,key_for_search_get,"");
+
+        if(id.size() != 0){
+
+            Response failRes = new Response(200,"fail");
+
+            toReturn = failRes.RestoJson2();
+
+        }else if(id.size() == 0){
+
+            House insertHouse = new House();
+
+
+
+        }
+
+
+        return toReturn;
     }
 
 }
